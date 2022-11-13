@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:stock_tracker/models/stock.dart';
 
@@ -21,8 +19,6 @@ class _AddStockFormState extends State<AddStockForm> {
 
   @override
   Widget build(BuildContext context) {
-    _closeModal() => Navigator.of(context).pop();
-
     return Card(child: LayoutBuilder(builder: (context, constraints) {
       return Column(
         children: [
@@ -55,9 +51,8 @@ class _AddStockFormState extends State<AddStockForm> {
                 print(searchResults[index].symbol);
                 return StockSearchResult(
                   searchResult: searchResults[index],
-                  onClick: () => _submit(
+                  onClick: () => _addStockToList(
                     _transformToStock(searchResults[index]),
-                    _closeModal,
                   ),
                 );
               },
@@ -93,14 +88,10 @@ class _AddStockFormState extends State<AddStockForm> {
     );
   }
 
-  void _submit(Stock stockToAdd, Function onDone) {
+  void _addStockToList(Stock stockToAdd) {
     print('submit');
     print(stockToAdd);
-    // TODO: mitä oikeasti lisätään? Parempi laittaa tää tapahtumaan rivin täppäyksellä.
     widget.onAddStock(stockToAdd);
-
-    // close modal
-    onDone();
   }
 }
 

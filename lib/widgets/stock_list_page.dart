@@ -18,32 +18,45 @@ class _StockListPageState extends State<StockListPage> {
     Stock('MUSTI', 'Musti Group Oyj', 'EUR', DateTime.now(), 30.43, 0.0032),
   ];
   late double _appBarHeight;
+  var _showAddForm = false;
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
+    final _appBar = AppBar(
       title: Text(widget.title),
       actions: [
         IconButton(
-          onPressed: () => _onShowModal(context),
+          onPressed: () {
+            setState(() {
+              _showAddForm = !_showAddForm;
+            });
+          }, //_onShowModal(context),
           icon: const Icon(Icons.add),
         ),
       ],
     );
-    _appBarHeight = appBar.preferredSize.height;
+    _appBarHeight = _appBar.preferredSize.height;
+
     return Scaffold(
-      appBar: appBar,
+      appBar: _appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            //AddStockForm(_onAddStock),
-            SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  _appBarHeight -
-                  MediaQuery.of(context).padding.vertical,
-              child: StockList(stockList: _stocks),
-            ),
+            if (_showAddForm)
+              SizedBox(
+                height: MediaQuery.of(context).size.height -
+                    _appBarHeight -
+                    MediaQuery.of(context).padding.vertical,
+                child: AddStockForm(_onAddStock),
+              ),
+            if (!_showAddForm)
+              SizedBox(
+                height: MediaQuery.of(context).size.height -
+                    _appBarHeight -
+                    MediaQuery.of(context).padding.vertical,
+                child: StockList(stockList: _stocks),
+              ),
             /*LayoutBuilder(builder: (context, constraints) {
               return SizedBox(
                 height: constraints.maxHeight,
@@ -60,21 +73,10 @@ class _StockListPageState extends State<StockListPage> {
   }
 
   void _onAddStock(Stock stock) {
-    // TODO: really should first do a search and only add a stock after user picked a stock from the results.
+    // TODO: fetch data for the added stock
     setState(() {
       _stocks.add(stock);
+      _showAddForm = false;
     });
-  }
-
-  void _onShowModal(BuildContext ctx) {
-    showModalBottomSheet(
-      context: ctx,
-      constraints: BoxConstraints.loose(Size.fromHeight(
-        MediaQuery.of(context).size.height -
-            _appBarHeight -
-            MediaQuery.of(context).padding.vertical,
-      )),
-      builder: (ctx) => AddStockForm(_onAddStock),
-    );
   }
 }
