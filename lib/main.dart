@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-//import './home_page.dart';
-//import './stock_list.dart';
+import 'widgets/add_stock_form.dart';
 import 'widgets/stock_list_page.dart';
 
 void main() {
@@ -41,8 +40,10 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
-      home: StockListPage(title: 'Stocks'),
-      //const HomePage(title: 'Stock tracker'),
+      home: const StockListPage(title: 'Stocks'),
+      routes: {
+        AddStockForm.routeName: (context) => AddStockForm(),
+      },
     );
   }
 }

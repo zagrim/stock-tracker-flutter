@@ -9,27 +9,6 @@ class StockList extends StatelessWidget {
 
   final List<Stock> stockList;
 
-/*  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemBuilder: (ctx, index) {
-        return Card(
-          child: SizedBox(
-            width: double.infinity,
-            child: Container(
-              child: StockListItem(stockList[index]),
-              padding: const EdgeInsets.symmetric(
-                vertical: 8.0,
-                horizontal: 16.0,
-              ),
-            ),
-          ),
-        );
-      },
-      itemCount: stockList.length,
-    );
-  }*/
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -38,12 +17,12 @@ class StockList extends StatelessWidget {
           return Container(
             width: double.infinity,
             margin: const EdgeInsets.only(bottom: 8.0),
-            child: Container(
-              child: StockListItem(stockList[index]),
+            child: Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 8.0,
                 horizontal: 16.0,
               ),
+              child: StockListItem(stockList[index]),
             ),
           );
         },

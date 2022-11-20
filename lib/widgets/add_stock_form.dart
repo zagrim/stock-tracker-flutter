@@ -5,9 +5,9 @@ import '../models/alphavantage.dart';
 import '../services/alphavantage_api.dart';
 
 class AddStockForm extends StatefulWidget {
-  const AddStockForm(this.onAddStock, {Key? key}) : super(key: key);
+  static const routeName = '/add-stock';
 
-  final Function onAddStock;
+  const AddStockForm({Key? key}) : super(key: key);
 
   @override
   State<AddStockForm> createState() => _AddStockFormState();
@@ -19,53 +19,44 @@ class _AddStockFormState extends State<AddStockForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(child: LayoutBuilder(builder: (context, constraints) {
-      return Column(
-        children: [
-          TextField(
-            autofocus: true,
-            decoration: const InputDecoration(
-              labelText: 'Ticker or name of stock to add',
+    final routeArgs =
+        ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
+    final Function _onAddStock = routeArgs['onAddStock'] as Function;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text("Add stock")),
+      body: Card(child: LayoutBuilder(builder: (context, constraints) {
+        return Column(
+          children: [
+            TextField(
+              autofocus: true,
+              decoration: const InputDecoration(
+                labelText: 'Ticker or name of stock to add',
+              ),
+              controller: stockSearchController,
+              onSubmitted: (_) => _search(),
             ),
-            controller: stockSearchController,
-            onSubmitted: (_) => _search(),
-          ),
-          /*Column(
-              children: searchResults
-                  .map((item) => Card(
-                        child: Column(
-                          children: [
-                            Text(item.symbol),
-                            Text(item.name),
-                          ],
-                        ),
-                      ))
-                  .toList(),
-            ),*/
-          SizedBox(
-            height: constraints.maxHeight -
-                55, //min(200, constraints.maxHeight - 55),
-            // TODO: preferably textfield height instead of magic const 55
-            child: ListView.builder(
-              itemBuilder: (ctx, index) {
-                print(searchResults[index].symbol);
-                return StockSearchResult(
-                  searchResult: searchResults[index],
-                  onClick: () => _addStockToList(
-                    _transformToStock(searchResults[index]),
-                  ),
-                );
-              },
-              itemCount: searchResults.length,
+            SizedBox(
+              height: constraints.maxHeight -
+                  55, //min(200, constraints.maxHeight - 55),
+              // TODO: preferably textfield height instead of magic const 55
+              child: ListView.builder(
+                itemBuilder: (ctx, index) {
+                  print(searchResults[index].symbol);
+                  return StockSearchResult(
+                    searchResult: searchResults[index],
+                    onClick: () => _onAddStock(
+                      _transformToStock(searchResults[index]),
+                    ),
+                  );
+                },
+                itemCount: searchResults.length,
+              ),
             ),
-          ),
-          /*TextButton(
-              onPressed: () => _submit(_closeModal),
-              child: const Text('Add'),
-            )*/
-        ],
-      );
-    }));
+          ],
+        );
+      })),
+    );
   }
 
   void _search() {
@@ -87,12 +78,6 @@ class _AddStockFormState extends State<AddStockForm> {
       null,
     );
   }
-
-  void _addStockToList(Stock stockToAdd) {
-    print('submit');
-    print(stockToAdd);
-    widget.onAddStock(stockToAdd);
-  }
 }
 
 class StockSearchResult extends StatelessWidget {
@@ -111,7 +96,11 @@ class StockSearchResult extends StatelessWidget {
       width: double.infinity,
       child: InkWell(
         onTap: onClick != null ? () => onClick!() : () {},
-        child: Container(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 8.0,
+            horizontal: 16.0,
+          ),
           child: Card(
             child: Column(
               children: [
@@ -119,10 +108,6 @@ class StockSearchResult extends StatelessWidget {
                 Text(searchResult.name),
               ],
             ),
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 8.0,
-            horizontal: 16.0,
           ),
         ),
       ),
