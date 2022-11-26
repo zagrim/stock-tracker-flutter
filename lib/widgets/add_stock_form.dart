@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:stock_tracker/models/stock.dart';
 
+import '../models/stock.dart';
 import '../models/alphavantage.dart';
 import '../services/alphavantage_api.dart';
+import './widget_size.dart';
 
 class AddStockForm extends StatefulWidget {
   static const routeName = '/add-stock';
@@ -17,29 +18,36 @@ class _AddStockFormState extends State<AddStockForm> {
   final stockSearchController = TextEditingController();
   final List<AlphaVantageSearchResult> searchResults = [];
 
+  double _searchFieldHeight = 0;
+
   @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context)!.settings.arguments as Map<String, Object>;
     final Function _onAddStock = routeArgs['onAddStock'] as Function;
 
+    final searchField = WidgetSize(
+      onChange: (Size size) {
+        setState(() => _searchFieldHeight = size.height);
+      },
+      child: TextField(
+        autofocus: true,
+        decoration: const InputDecoration(
+          labelText: 'Ticker or name of stock to add',
+        ),
+        controller: stockSearchController,
+        onSubmitted: (_) => _search(),
+      ),
+    );
+
     return Scaffold(
       appBar: AppBar(title: const Text("Add stock")),
       body: Card(child: LayoutBuilder(builder: (context, constraints) {
         return Column(
           children: [
-            TextField(
-              autofocus: true,
-              decoration: const InputDecoration(
-                labelText: 'Ticker or name of stock to add',
-              ),
-              controller: stockSearchController,
-              onSubmitted: (_) => _search(),
-            ),
+            searchField,
             SizedBox(
-              height: constraints.maxHeight -
-                  55, //min(200, constraints.maxHeight - 55),
-              // TODO: preferably textfield height instead of magic const 55
+              height: constraints.maxHeight - _searchFieldHeight,
               child: ListView.builder(
                 itemBuilder: (ctx, index) {
                   print(searchResults[index].symbol);

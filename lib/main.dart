@@ -30,14 +30,14 @@ class MyApp extends StatelessWidget {
         textTheme: ThemeData.light().textTheme.copyWith(
               subtitle1: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 14,
+                fontSize: 18,
               ),
               subtitle2: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 12,
+                fontSize: 16,
               ),
               bodyText2: const TextStyle(
-                fontSize: 12,
+                fontSize: 16,
               ),
             ),
       ),

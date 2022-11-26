@@ -11,6 +11,7 @@ class StockListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -19,13 +20,13 @@ class StockListItem extends StatelessWidget {
           children: [
             Text(
               item.name,
-              style: Theme.of(context).textTheme.subtitle1,
+              style: theme.textTheme.subtitle1,
             ),
             Text(
               item.timestamp != null
                   ? timestampFormat.format(item.timestamp!)
                   : '',
-              style: Theme.of(context).textTheme.bodyText2,
+              style: theme.textTheme.bodyText2,
             ),
           ],
         ),
@@ -37,7 +38,7 @@ class StockListItem extends StatelessWidget {
                   ? Price(
                       item.latestPrice!,
                       item.currency,
-                      textStyle: Theme.of(context).textTheme.subtitle2,
+                      textStyle: theme.textTheme.subtitle2,
                     )
                   : const Text(''),
               item.dayChange != null
