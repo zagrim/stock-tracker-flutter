@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '/pages/settings_page.dart';
 import 'widgets/add_stock_form.dart';
-import 'widgets/stock_list_page.dart';
+import 'pages/stock_list_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,9 +41,11 @@ class MyApp extends StatelessWidget {
               ),
             ),
       ),
-      home: const StockListPage(title: 'Stocks'),
+      home: const StockListPage(),
       routes: {
-        AddStockForm.routeName: (context) => AddStockForm(),
+        StockListPage.routeName: (context) => const StockListPage(),
+        AddStockForm.routeName: (context) => const AddStockForm(),
+        SettingsPage.routeName: (context) => const SettingsPage(),
       },
     );
   }
