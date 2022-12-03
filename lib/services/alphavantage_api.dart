@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:stock_tracker/models/alphavantage.dart';
+import 'package:stock_tracker/models/global_settings.dart';
 
 const String apiUrl = 'https://www.alphavantage.co/query';
 
@@ -34,21 +36,25 @@ By default, datatype=json. Strings json and csv are accepted with the following 
 
 */
 
-Future<List<AlphaVantageSearchResult>> searchForSymbol(String searchPhrase) {
+Future<List<AlphaVantageSearchResult>> searchForSymbol(
+  String searchPhrase,
+) {
   return fetchJson(
     'function=SYMBOL_SEARCH&keywords=$searchPhrase',
     AlphaVantageSearchResult.unwrapResult,
   );
 }
 
-Future<List<AlphaVantageQuoteResult>> getQuote(String symbol) {
+Future<List<AlphaVantageQuoteResult>> getQuote(
+  String symbol,
+) {
   return fetchJson(
     'function=GLOBAL_QUOTE&symbol=$symbol',
     AlphaVantageQuoteResult.unwrapResult,
   );
 }
 
-_withApiKey(String query) {
+_withApiKey(String apiKey, String query) {
   return '$query&apikey=$apiKey';
 }
 
@@ -69,8 +75,11 @@ _asJson(String query) {
       .catchError(print);
 }*/
 Future<T> fetchJson<T>(String data, JsonMapper<T> jsonMapper) {
+  final apiKey = GetIt.instance.get<GlobalSettings>().alphaVantageApiKey;
+  print("in fetchJson, apiKey:");
+  print(apiKey);
   return http
-      .get(Uri.parse('$apiUrl?${_withApiKey(_asJson(data))}'))
+      .get(Uri.parse('$apiUrl?${_withApiKey(apiKey, _asJson(data))}'))
       /*.then((response) {
         print(response.body);
         return response;

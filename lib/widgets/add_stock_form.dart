@@ -16,9 +16,10 @@ class AddStockForm extends StatefulWidget {
 
 class _AddStockFormState extends State<AddStockForm> {
   final stockSearchController = TextEditingController();
-  final List<AlphaVantageSearchResult> searchResults = [];
 
+  final List<AlphaVantageSearchResult> _searchResults = [];
   double _searchFieldHeight = 0;
+  bool _inProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +47,35 @@ class _AddStockFormState extends State<AddStockForm> {
         return Column(
           children: [
             searchField,
-            SizedBox(
-              height: constraints.maxHeight - _searchFieldHeight,
-              child: ListView.builder(
-                itemBuilder: (ctx, index) {
-                  print(searchResults[index].symbol);
-                  return StockSearchResult(
-                    searchResult: searchResults[index],
-                    onClick: () => _onAddStock(
-                      _transformToStock(searchResults[index]),
-                    ),
-                  );
-                },
-                itemCount: searchResults.length,
-              ),
+            Stack(
+              children: [
+                SizedBox(
+                  height: constraints.maxHeight - _searchFieldHeight,
+                  child: ListView.builder(
+                    itemBuilder: (ctx, index) {
+                      print(_searchResults[index].symbol);
+                      return StockSearchResult(
+                        searchResult: _searchResults[index],
+                        onClick: () => _onAddStock(
+                          _transformToStock(_searchResults[index]),
+                        ),
+                      );
+                    },
+                    itemCount: _searchResults.length,
+                  ),
+                ),
+                Align(
+                  alignment: FractionalOffset.center,
+                  child: Container(
+                    child: _inProgress
+                        ? const Padding(
+                            padding: EdgeInsets.all(10),
+                            child: CircularProgressIndicator(),
+                          )
+                        : null,
+                  ),
+                )
+              ],
             ),
           ],
         );
@@ -68,10 +84,12 @@ class _AddStockFormState extends State<AddStockForm> {
   }
 
   void _search() {
+    setState(() => _inProgress = true);
     searchForSymbol(stockSearchController.text).then((value) {
       setState(() {
-        searchResults.clear();
-        searchResults.addAll(value);
+        _searchResults.clear();
+        _searchResults.addAll(value);
+        _inProgress = false;
       });
     });
   }

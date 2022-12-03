@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:stock_tracker/models/global_settings.dart';
 
 import '../widgets/main_drawer.dart';
 
@@ -12,6 +14,45 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final apiKeyController = TextEditingController(
+    text: GetIt.instance.get<GlobalSettings>().alphaVantageApiKey,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    apiKeyController.addListener(() {
+      GetIt.instance.get<GlobalSettings>().alphaVantageApiKey =
+          apiKeyController.text;
+      print("api key set to ");
+      print(GetIt.instance.get<GlobalSettings>().alphaVantageApiKey);
+    });
+  }
+
+  @override
+  void dispose() {
+    apiKeyController.dispose();
+    super.dispose();
+  }
+
+  ListTile buildSettingsItem(
+    String labelText,
+    String hintText,
+    TextEditingController controller,
+  ) {
+    return ListTile(
+      title: TextField(
+        decoration: InputDecoration(
+          labelText: labelText,
+          labelStyle: const TextStyle(fontSize: 14),
+          hintText: hintText,
+          hintStyle: const TextStyle(fontSize: 13),
+        ),
+        controller: controller,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,9 +60,17 @@ class _SettingsPageState extends State<SettingsPage> {
       drawer: const MainDrawer(),
       body: Column(
         children: [
-          ListTile(
-            title: const Text('aksjf'),
-          )
+          const ListTile(
+            title: Text(
+              'Alpha Vantage',
+              textAlign: TextAlign.left,
+            ),
+          ),
+          buildSettingsItem(
+            'Alpha Vantage API key',
+            'Your personal API key for Alpha Vantage',
+            apiKeyController,
+          ),
         ],
       ),
     );

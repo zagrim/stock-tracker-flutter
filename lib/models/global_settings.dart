@@ -1,0 +1,3 @@
+class GlobalSettings {
+  String alphaVantageApiKey = '';
+}

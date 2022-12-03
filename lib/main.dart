@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
-import '/pages/settings_page.dart';
-import 'widgets/add_stock_form.dart';
-import 'pages/stock_list_page.dart';
+import 'models/global_settings.dart';
+import './pages/settings_page.dart';
+import './widgets/add_stock_form.dart';
+import './pages/stock_list_page.dart';
 
 void main() {
+  GetIt.instance.registerSingleton(GlobalSettings());
+
   runApp(const MyApp());
 }
 
