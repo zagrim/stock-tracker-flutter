@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/stock_portfolio.dart';
 import '../widgets/main_drawer.dart';
 import '../widgets/stock_list.dart';
 import '../widgets/add_stock_form.dart';
 import '../models/stock.dart';
 
-class StockListPage extends StatefulWidget {
+class StockListPage extends StatelessWidget {
   static const routeName = '/stock-list';
 
-  const StockListPage({Key? key /*, required this.title*/}) : super(key: key);
-
-  @override
-  State<StockListPage> createState() => _StockListPageState();
-
-  //final String title;
-}
-
-class _StockListPageState extends State<StockListPage> {
-  final List<Stock> _stocks = [
-    Stock('QTCOM', 'Qt Group Oyj', 'EUR', DateTime.now(), 135.60, -0.008),
-    Stock('MUSTI', 'Musti Group Oyj', 'EUR', DateTime.now(), 30.43, 0.0032),
-  ];
+  const StockListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final portfolio = context.watch<StockPortfolio>();
+    void _onAddStock(Stock stock) {
+      // TODO: fetch data for the added stock
+      portfolio.addStock(stock);
+      Navigator.of(context).pop();
+    }
+
     final _appBar = AppBar(
       title: const Text('Stocks'),
       actions: [
@@ -51,7 +48,7 @@ class _StockListPageState extends State<StockListPage> {
             children: [
               SizedBox(
                 height: _contentMaxHeight,
-                child: StockList(stockList: _stocks),
+                child: StockList(),
               ),
               /*LayoutBuilder(builder: (context, constraints) {
                     return SizedBox(
@@ -67,13 +64,5 @@ class _StockListPageState extends State<StockListPage> {
         ),
       ),
     );
-  }
-
-  void _onAddStock(Stock stock) {
-    // TODO: fetch data for the added stock
-    setState(() {
-      _stocks.add(stock);
-      Navigator.of(context).pop();
-    });
   }
 }

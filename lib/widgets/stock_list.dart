@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/stock_portfolio.dart';
 import './stock_list_item.dart';
-import '../models/stock.dart';
 
 class StockList extends StatelessWidget {
-  const StockList({Key? key, required this.stockList}) : super(key: key);
-
-  final List<Stock> stockList;
+  const StockList({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final portfolio = context.watch<StockPortfolio>();
     return SizedBox(
       child: ListView.builder(
         itemBuilder: (ctx, index) {
@@ -22,11 +22,11 @@ class StockList extends StatelessWidget {
                 vertical: 8.0,
                 horizontal: 16.0,
               ),
-              child: StockListItem(stockList[index]),
+              child: StockListItem(portfolio.stocks[index]),
             ),
           );
         },
-        itemCount: stockList.length,
+        itemCount: portfolio.stocks.length,
       ),
     );
   }
