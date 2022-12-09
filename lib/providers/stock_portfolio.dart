@@ -18,9 +18,9 @@ class StockPortfolio with ChangeNotifier {
     notifyListeners();
   }
 
-  deleteStock(Stock stock) {
-    _stocks.removeWhere((s) => s.ticker == stock.ticker);
-    print('removed stock ' + stock.ticker);
+  deleteStock(String ticker) {
+    _stocks.removeWhere((s) => s.ticker == ticker);
+    print('removed stock ' + ticker);
     notifyListeners();
   }
 }
