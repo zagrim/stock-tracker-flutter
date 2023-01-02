@@ -42,7 +42,7 @@ class StockListItem extends StatelessWidget {
                     )
                   : const Text(''),
               item.dayChange != null
-                  ? Percent(item.dayChange!)
+                  ? Percent(item.dayChangePercent!)
                   : const Text(''),
             ],
           ),

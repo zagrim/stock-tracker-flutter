@@ -1,4 +1,4 @@
-import 'dart:ffi';
+import '../utils/parsers.dart';
 
 class AlphaVantageSearchResult {
   final String symbol;
@@ -49,15 +49,15 @@ class AlphaVantageSearchResult {
 
 class AlphaVantageQuoteResult {
   final String symbol;
-  final Float open;
-  final Float high;
-  final Float low;
-  final Float price;
-  final Float volume; // TODO: or Int?
+  final double open;
+  final double high;
+  final double low;
+  final double price;
+  final double volume; // TODO: or Int?
   final String latestTradingDay;
-  final Float previousClose;
-  final Float change;
-  final Float changePercent;
+  final double previousClose;
+  final double change;
+  final double changePercent;
 
   const AlphaVantageQuoteResult(
       {required this.symbol,
@@ -74,15 +74,15 @@ class AlphaVantageQuoteResult {
   factory AlphaVantageQuoteResult.fromJson(Map<String, dynamic> json) {
     return AlphaVantageQuoteResult(
       symbol: json['01. symbol'],
-      open: json['02. open'],
-      high: json['03. high'],
-      low: json['04. low'],
-      price: json['05. price'],
-      volume: json['06. volume'],
+      open: double.parse(json['02. open']),
+      high: double.parse(json['03. high']),
+      low: double.parse(json['04. low']),
+      price: double.parse(json['05. price']),
+      volume: double.parse(json['06. volume']),
       latestTradingDay: json['07. latest trading day'],
-      previousClose: json['08. previous close'],
-      change: json['09. change'],
-      changePercent: json['10. change percent'],
+      previousClose: double.parse(json['08. previous close']),
+      change: double.parse(json['09. change']),
+      changePercent: parsePercentage(json['10. change percent']),
     );
   }
 

@@ -8,6 +8,7 @@ class Stock {
   final double lowPrice;
   final double latestVolume;*/
   final double? dayChange;
+  final double? dayChangePercent;
 
   Stock(
     this.ticker,
@@ -16,5 +17,6 @@ class Stock {
     this.timestamp,
     this.latestPrice,
     this.dayChange,
+    this.dayChangePercent,
   );
 }

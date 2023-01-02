@@ -45,9 +45,10 @@ Future<List<AlphaVantageSearchResult>> searchForSymbol(
   );
 }
 
-Future<List<AlphaVantageQuoteResult>> getQuote(
+Future<AlphaVantageQuoteResult> getQuote(
   String symbol,
 ) {
+  print('getQuote for $symbol');
   return fetchJson(
     'function=GLOBAL_QUOTE&symbol=$symbol',
     AlphaVantageQuoteResult.unwrapResult,

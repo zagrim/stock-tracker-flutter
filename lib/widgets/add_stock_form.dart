@@ -62,8 +62,11 @@ class _AddStockFormState extends State<AddStockForm> {
                       print(_searchResults[index].symbol);
                       return StockSearchResult(
                         searchResult: _searchResults[index],
-                        onClick: () => _onAddStock(
-                          _transformToStock(_searchResults[index]),
+                        onClick: () async => _onAddStock(
+                          await _fetchStockDetails(
+                              _searchResults[index].symbol,
+                              _searchResults[index].name,
+                              _searchResults[index].currency),
                         ),
                       );
                     },
@@ -100,15 +103,23 @@ class _AddStockFormState extends State<AddStockForm> {
     });
   }
 
-  Stock _transformToStock(AlphaVantageSearchResult searchResult) {
-    return Stock(
-      searchResult.symbol,
-      searchResult.name,
-      searchResult.currency,
-      null,
-      null,
-      null,
-    );
+  Future<Stock> _fetchStockDetails(
+      String ticker, String name, String currency) async {
+    setState(() => _inProgress = true);
+    return await getQuote(ticker).then((value) {
+      setState(() {
+        _inProgress = false;
+      });
+      return Stock(
+        ticker,
+        name,
+        currency,
+        DateTime.now(),
+        value.price,
+        value.change,
+        value.changePercent,
+      );
+    });
   }
 }
 
