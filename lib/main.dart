@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
                 ),
               ),
         ),
-        home: const StockListPage(),
+        home: GetIt.instance.get<GlobalSettings>().isApiKeySet()
+            ? const StockListPage()
+            : const SettingsPage(),
         routes: {
           StockListPage.routeName: (context) => const StockListPage(),
           AddStockForm.routeName: (context) => const AddStockForm(),
