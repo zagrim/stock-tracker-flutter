@@ -55,6 +55,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO add persistence and validation
     return Scaffold(
       appBar: AppBar(title: const Text('Settings')),
       drawer: const MainDrawer(),

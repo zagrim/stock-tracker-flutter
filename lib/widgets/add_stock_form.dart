@@ -22,6 +22,12 @@ class _AddStockFormState extends State<AddStockForm> {
   bool _inProgress = false;
 
   @override
+  void dispose() {
+    stockSearchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final routeArgs =
         ModalRoute.of(context)!.settings.arguments as Map<String, Object>;

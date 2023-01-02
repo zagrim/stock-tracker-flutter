@@ -39,6 +39,47 @@ class StockList extends StatelessWidget {
                 child: StockListItem(portfolio.stocks[index]),
                 onDismissed: (direction) {
                   portfolio.deleteStock(portfolio.stocks[index].ticker);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Deleted stock from portfolio'),
+                      duration: Duration(
+                        seconds: 3,
+                      ),
+                      /*action: SnackBarAction(
+                        label: 'Undo',
+                        onPressed:
+                            () {}, // TODO: how to undo without having to re-add (thus changing order of the list)?
+                      ),*/
+                    ),
+                  );
+                },
+                confirmDismiss: (direction) {
+                  return showDialog<bool>(
+                    context: context,
+                    builder: (ctx) {
+                      return AlertDialog(
+                        title: const Text('Are you sure?'),
+                        content: Text(
+                          'Remove ${portfolio.stocks[index].ticker} from portfolio?',
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(ctx, true);
+                            },
+                            child: const Text('Yes'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(ctx, false);
+                            },
+                            child: const Text('No'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
                 },
               ),
             ),
